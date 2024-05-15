@@ -1,0 +1,20 @@
+sequenceDiagram
+    participant User
+    participant Browser
+    participant Server
+
+    User->>Browser: Write a new note
+    activate Browser
+
+    Browser->>Browser: Save the note in the SPA interface
+    Browser->>Browser: Makes a POST request to the serve
+    activate Browser
+
+    Browser->>Server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    activate Server
+    Server-->>Browser: 201 Created (Note created succesfully)
+    deactivate Server
+
+    Browser->>Browser: Update the interface with the new note
+    Browser-->>User: Displays the updated interface with the new note
+    deactivate Browser

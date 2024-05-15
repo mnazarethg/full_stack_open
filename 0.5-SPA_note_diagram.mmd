@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant User
+    participant Browser
+    participant Server
+
+    User->>Browser: Access to https://studies.cs.helsinki.fi/exampleapp/spa
+    activate Browser
+
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/spa
+    activate Server
+    Server-->>Browser: Index.html
+    deactivate Server
+
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    activate Server
+    Server-->>Browser: main.js
+    deactivate Server
+
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate Server
+    Server-->>Browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ...]
+    deactivate Server
+
+    Browser->>Browser: SPA load the data and render the interface
+    Browser-->>User: Displays the SPA interface
+    deactivate Browser
