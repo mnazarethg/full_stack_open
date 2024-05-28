@@ -1,15 +1,16 @@
-import { useState } from 'react';
-const Person = ({ persons, showAll }) => {
+
+
+const Person = ({ persons, showAll, toggleRemove }) => {
     const personsToShow = showAll
-    ? persons.filter(person => person.name.toLowerCase().includes(showAll.toLowerCase()))
+    ? persons.filter(person => person.name && person.name.toLowerCase().includes(showAll.toLowerCase()))
     : persons
 
-    console.log(personsToShow)
     return (
     <>
         {personsToShow.map(person => (
         <div key={person.id}>
-            {person.name} - {person.number}
+            {person.name} - {person.number }
+            <button onClick={() => toggleRemove(person.id)}>delete</button>
         </div>
         ))}
     </>
