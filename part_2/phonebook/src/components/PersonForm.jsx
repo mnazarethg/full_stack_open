@@ -18,24 +18,33 @@ const PersonForm = ({ persons, setPersons, setErrorMessage, setErrorType }) => {
       const addName = (event) => {
         event.preventDefault()
         const nameObject = {
+            id: persons.length + 1,
             name: newName,
             number: newNumber,
-            id: persons.length + 1,
         }
         const personExists = persons.find(p => p.name === newName);
+        console.log(personExists)
         if (personExists && window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
           const changedNumber = { ...personExists, number: newNumber };
+          console.log(changedNumber)
           personService.update(personExists.id, changedNumber)
             .then((returnedPerson) => {
+              console.log("returned person" + returnedPerson)
               setPersons(persons.map(person => person.id !== personExists.id ? person : returnedPerson));
               setErrorMessage(`Changed ${newName}`);
               setErrorType('error');
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
               setNewName('');
               setNewNumber('');
             })
             .catch(error => {
               setErrorMessage(`Information of ${newName} has already removed from server`);;
               setErrorType('error2'); 
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
             });
         } else {
           personService.create(nameObject)
@@ -43,6 +52,9 @@ const PersonForm = ({ persons, setPersons, setErrorMessage, setErrorType }) => {
               setPersons(persons.concat(returnedName));
               setErrorMessage(`Added ${newName}`);
               setErrorType('error');
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
               setNewName('');
               setNewNumber('');
             })
