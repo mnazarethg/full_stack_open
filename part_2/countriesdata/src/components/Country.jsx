@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import weatherServices from "../services/weather";
 
 const Country = ({ countries, showData, selectedCountry, setSelectedCountry, weather, setWeather }) => {
 
@@ -5,13 +7,17 @@ const Country = ({ countries, showData, selectedCountry, setSelectedCountry, wea
 	? countries.filter(country => country.name?.common && country.name.common.toLowerCase().includes(showData.toLowerCase()))
 	: countries;
 
-	const weatherToShow = weather.filter(w => w.main);
-	console.log(weather)
-	console.log(weatherToShow)
-	
 	const handleShowCountry = (country) => {
 		setSelectedCountry(country);
 	};
+
+	useEffect(() => {
+		console.log("apital" + countriesToShow.map(country => country.capital))
+		weatherServices(countriesToShow.map(country => country.capital)).then(weatherData => {
+			setWeather(weatherData);
+		});
+	}, [countriesToShow]);
+	
 
 	if (countriesToShow.length > 10) {
 		return <div>Too many matches, specify another filter</div>;
@@ -58,7 +64,9 @@ const Country = ({ countries, showData, selectedCountry, setSelectedCountry, wea
 						<img src={country.flags.png} />
 						<h2>Weather in {country.capital}</h2>
 						
-						<p>Temperature: {weather} K</p>
+						<p>temperature {weather.main.temp} Celcius</p>
+						<img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}.png`} alt="Weather icon" />
+						<p>wind {weather.wind.speed} m/s</p>
 					</div>
 				))}
 			</>
