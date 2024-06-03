@@ -13,6 +13,8 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [info, setInfo] = useState({ message: null})
 
+  console.log(persons);
+  
   useEffect(() => {
     personService.getAll().then((initialPersons => 
       setPersons(initialPersons)
