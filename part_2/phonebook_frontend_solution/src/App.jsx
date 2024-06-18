@@ -48,7 +48,6 @@ const App = () => {
         notifyWith(`${person.name} has already been removed`, 'error')
         setPersons(persons.filter(p => p.id !== person.id))
       })
-
       cleanForm()
     }
   }
@@ -56,24 +55,23 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     const person = persons.find(p => p.name === newName)
-
     if (person) {
       updatePerson(person)
       return
-    }
-
+    } 
     personService.create({
       name: newName,
       number: newNumber
     }).then(createdPerson => {
       setPersons(persons.concat(createdPerson))
-
       notifyWith(`${createdPerson.name} added!`)
-
       cleanForm()
     })
-  }
-
+    .catch(error => {
+      console.log(error.response.data.error)
+    });
+    }
+    
   const removePerson = (person) => {
     const ok = window.confirm(`remove ${person.name} from phonebook?`)
     if ( ok ) {
