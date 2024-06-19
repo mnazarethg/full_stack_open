@@ -9,14 +9,14 @@ import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')   
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [loginVisible, setLoginVisible] = useState(false)
 
   const blogFormRef = useRef()
+
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
 
   useEffect(() => {    
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')    
@@ -40,14 +40,13 @@ const App = () => {
       const user = await loginService.login({        
         username, password,      
       })
-      
       window.localStorage.setItem(        
         'loggedBlogappUser', JSON.stringify(user)      
-    ) 
+      ) 
       blogService.setToken(user.token)  
       setUser(user)
       setUsername('')      
-      setPassword('')    
+      setPassword('')
     } catch (exception) {
       setErrorMessage('wrong username or password')
       setTimeout(() => {
@@ -56,8 +55,6 @@ const App = () => {
     }
   }
 
-
-
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     blogService
@@ -65,11 +62,23 @@ const App = () => {
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
       })
+      setErrorMessage(
+        `a new blog '${blogObject.title}' by '${blogObject.author}' added`
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+
+  const handleLogout = async () => {    
+    window.localStorage.clear()
   }
 
   if (user === null) {
     return (
       <div>
+        <h2>Login</h2>
+        <Notification message={errorMessage} />
         <LoginForm
             username={username}
             password={password}
@@ -85,10 +94,10 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification message={errorMessage} />
-
-      {!user && loginForm()}
+      {!user && LoginForm()}
       {user && <div>
-      <p>{username} logged-in</p>
+      <p>{user.username} logged in</p>
+      <button type="submit" onClick={handleLogout}>logout</button> 
       <Togglable buttonLabel='new blog' ref={blogFormRef}>
         <BlogForm
           createBlog={addBlog}
@@ -96,8 +105,8 @@ const App = () => {
       </Togglable>
       </div>
      } 
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {sortedBlogs.map(blog =>
+        <Blog key={blog.id} blog={blog} user={user}/>
       )}
     </div>
   )
