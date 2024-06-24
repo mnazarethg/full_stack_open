@@ -1,6 +1,6 @@
 import { useState } from "react"
 import blogService from '../services/blogs'
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog  }) => {
 	const [detailsVisible, setDetailsVisible] = useState(false)
 	
 	const blogStyle = {
@@ -32,7 +32,7 @@ const Blog = ({ blog, user }) => {
 				.remove(blog.id);
 		}
 	};
-	console.log("user " + user.token)
+
 	return (
 		<div style={blogStyle}>
 			<div>

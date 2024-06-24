@@ -63,7 +63,7 @@ const App = () => {
         setBlogs(blogs.concat(returnedBlog))
       })
       setErrorMessage(
-        `a new blog '${blogObject.title}' by '${blogObject.author}' added`
+        `a new blog ${blogObject.title} by ${blogObject.author} added`
       )
       setTimeout(() => {
         setErrorMessage(null)
