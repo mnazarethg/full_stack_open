@@ -1,6 +1,4 @@
-//EL STATE ES EL FILTRO! SEGUIR ACA
-
-const filterReducer = (state = 'often', action) => {
+const filterReducer = (state = 'ALL', action) => {
   console.log("state" + state)
   console.log('ACTION: ', action)
   switch (action.type) {
