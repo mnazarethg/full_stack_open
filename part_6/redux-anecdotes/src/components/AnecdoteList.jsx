@@ -34,9 +34,6 @@ const Anecdotes = () => {
 					{anecdote.content}
 				</div>
 				<div>
-					
-				</div>
-				<div>
 					has {anecdote.votes}
 					<button onClick={() => handleVote(anecdote.id)}>vote</button>
 				</div>
